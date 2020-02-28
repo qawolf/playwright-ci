@@ -3,7 +3,7 @@
   "name": "playwright-ci",
   "license": "BSD-3.0",
   "version": "0.1.2",
-  "description": "☁️ Set up Playwright in CI",
+  "description": "☁️ Set up Playwright in CI with one command",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
   "files": [

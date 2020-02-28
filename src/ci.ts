@@ -16,7 +16,7 @@ const paths = {
   azure: 'azure-pipelines.yml',
   bitbucket: 'bitbucket-pipelines.yml',
   circleci: '.circleci/config.yml',
-  github: '.github/workflows/qawolf.yml',
+  github: '.github/workflows/playwright.yml',
   gitlab: '.gitlab-ci.yml',
   jenkins: 'Jenkinsfile',
 };

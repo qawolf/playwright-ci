@@ -1,8 +1,8 @@
 # playwright-ci
 
-☁️ Set up [Playwright](https://github.com/microsoft/playwright) in CI.
+☁️ Set up [Playwright](https://github.com/microsoft/playwright) in CI with one command.
 
-## ☁️ Set up CI
+## Usage
 
 [<img align="center" height="20px" src="https://cdn.iconscout.com/icon/free/png-256/azure-190760.png" /> Azure](https://azure.microsoft.com/en-us/services/devops)
 
