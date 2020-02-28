@@ -2,7 +2,7 @@
   "author": "QA Wolf",
   "name": "playwright-ci",
   "license": "BSD-3.0",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "☁️ Set up Playright in CI",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
