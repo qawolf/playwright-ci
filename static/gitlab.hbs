@@ -1,0 +1,12 @@
+qawolf:
+  image: qawolf/playwright-ci:v{{{version}}}
+
+  cache:
+    paths:
+      - node_modules/
+
+  script:
+    - npm install
+    # # Start local server
+    # - npm run start & npx wait-on http://localhost:3000
+    - npm test

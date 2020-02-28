@@ -1,0 +1,12 @@
+pipelines:
+  default:
+    - step:
+        name: Playwright Tests
+        image: qawolf/playwright-ci:v{{{version}}}
+        caches:
+          - node
+        script:
+          - npm install
+          ## Start local server
+          # - npm run start & npx wait-on http://localhost:3000
+          - npm test
