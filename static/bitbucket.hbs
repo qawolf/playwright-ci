@@ -10,6 +10,10 @@ pipelines:
           ## Start local server
           # - npm run start & npx wait-on http://localhost:3000
 
+          {{#if qawolf}}
+          - npx qawolf test
+          {{else}}
           # replace below with command you want to run, example for running a script below
           # - node myScript.js
           - npm test
+          {{/if}}

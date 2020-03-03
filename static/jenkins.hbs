@@ -15,9 +15,14 @@ pipeline {
                 // // Start local server
                 // sh 'npm run start & npx wait-on http://localhost:3000'
 
+                {{#if qawolf}}
+                sh 'npx qawolf test'
+                {{else}}
                 // replace below with command you want to run, example for running a script below
                 // sh 'node myScript.js'
                 sh 'npm test'
+                {{/if}}
+                
             }
         }
     }

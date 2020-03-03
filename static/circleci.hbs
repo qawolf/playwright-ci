@@ -23,9 +23,13 @@ jobs:
             # npm run start & 
             # npx wait-on http://localhost:3000
 
+            {{#if qawolf}}
+            npx qawolf test
+            {{else}}
             # replace below with command you want to run, example for running a script below
             # node myScript.js
             npm test
+            {{/if}}
 
 # # example for running on a schedule, edit to suit your use case
 # # documentation: https://circleci.com/docs/2.0/configuration-reference/#schedule

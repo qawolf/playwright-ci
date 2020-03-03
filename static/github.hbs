@@ -36,6 +36,11 @@ jobs:
       # - name: Start local server
       #   run: npm run start & npx wait-on http://localhost:3000
 
+      {{#if qawolf}}
+      - run: npx qawolf test
+      {{else}}
       # replace below with command you want to run, example for running a script below
       # - run: node myScript.js
       - run: npm test
+      {{/if}}
+      
