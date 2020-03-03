@@ -13,7 +13,7 @@ program
   .description('set up an Azure Pipeline')
   .option(QAWOLF_FLAG, QAWOLF_DESCRIPTION)
   .action(async ({ qawolf }) => {
-    await saveCiTemplate('azure', qawolf);
+    await saveCiTemplate({ provider: 'azure', qawolf });
   });
 
 program
@@ -21,7 +21,7 @@ program
   .description('set up an Bitbucket Pipeline')
   .option(QAWOLF_FLAG, QAWOLF_DESCRIPTION)
   .action(async ({ qawolf }) => {
-    await saveCiTemplate('bitbucket', qawolf);
+    await saveCiTemplate({ provider: 'bitbucket', qawolf });
   });
 
 program
@@ -29,7 +29,7 @@ program
   .description('set up CircleCI')
   .option(QAWOLF_FLAG, QAWOLF_DESCRIPTION)
   .action(async ({ qawolf }) => {
-    await saveCiTemplate('circleci', qawolf);
+    await saveCiTemplate({ provider: 'circleci', qawolf });
   });
 
 program
@@ -37,7 +37,7 @@ program
   .description('set up a GitHub Action')
   .option(QAWOLF_FLAG, QAWOLF_DESCRIPTION)
   .action(async ({ qawolf }) => {
-    await saveCiTemplate('github', qawolf);
+    await saveCiTemplate({ provider: 'github', qawolf });
   });
 
 program
@@ -45,7 +45,7 @@ program
   .description('set up GitLab CI/CD')
   .option(QAWOLF_FLAG, QAWOLF_DESCRIPTION)
   .action(async ({ qawolf }) => {
-    await saveCiTemplate('gitlab', qawolf);
+    await saveCiTemplate({ provider: 'gitlab', qawolf });
   });
 
 program
@@ -53,7 +53,7 @@ program
   .description('set up Jenkins')
   .option(QAWOLF_FLAG, QAWOLF_DESCRIPTION)
   .action(async ({ qawolf }) => {
-    await saveCiTemplate('jenkins', qawolf);
+    await saveCiTemplate({ provider: 'jenkins', qawolf });
   });
 
 program.arguments('<command>').action(cmd => {
