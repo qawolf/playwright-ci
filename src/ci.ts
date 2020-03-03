@@ -14,7 +14,7 @@ type CiProvider =
 
 interface SaveCiTemplateArgs {
   provider: CiProvider;
-  qawolf?: boolean;
+  qawolf: boolean;
 }
 
 const paths = {
@@ -35,8 +35,7 @@ export const saveCiTemplate = async ({
   provider,
   qawolf,
 }: SaveCiTemplateArgs): Promise<void> => {
-  const useQawolf = qawolf || false;
-  const providerPath = useQawolf ? qawolfPaths[provider] : paths[provider];
+  const providerPath = qawolf ? qawolfPaths[provider] : paths[provider];
 
   const outputPath = join(process.cwd(), providerPath);
 
@@ -54,7 +53,7 @@ export const saveCiTemplate = async ({
   const ciTemplate = compile(
     readFileSync(resolve(__dirname, `../static/${provider}.hbs`), 'utf8'),
   );
-  const ci = ciTemplate({ qawolf: useQawolf, version });
+  const ci = ciTemplate({ qawolf, version });
 
   await outputFile(outputPath, ci, 'utf8');
 
