@@ -12,6 +12,11 @@ type CiProvider =
   | 'gitlab'
   | 'jenkins';
 
+interface SaveCiTemplateArgs {
+  provider: CiProvider;
+  qawolf: boolean;
+}
+
 const paths = {
   azure: 'azure-pipelines.yml',
   bitbucket: 'bitbucket-pipelines.yml',
@@ -21,8 +26,16 @@ const paths = {
   jenkins: 'Jenkinsfile',
 };
 
-export const saveCiTemplate = async (provider: CiProvider): Promise<void> => {
-  const providerPath = paths[provider];
+const qawolfPaths = {
+  ...paths,
+  github: '.github/workflows/qawolf.yml',
+};
+
+export const saveCiTemplate = async ({
+  provider,
+  qawolf,
+}: SaveCiTemplateArgs): Promise<void> => {
+  const providerPath = qawolf ? qawolfPaths[provider] : paths[provider];
 
   const outputPath = join(process.cwd(), providerPath);
 
@@ -40,7 +53,7 @@ export const saveCiTemplate = async (provider: CiProvider): Promise<void> => {
   const ciTemplate = compile(
     readFileSync(resolve(__dirname, `../static/${provider}.hbs`), 'utf8'),
   );
-  const ci = ciTemplate({ version });
+  const ci = ciTemplate({ qawolf, version });
 
   await outputFile(outputPath, ci, 'utf8');
 

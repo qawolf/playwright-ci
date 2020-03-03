@@ -3,48 +3,57 @@ import { yellow } from 'kleur';
 import { saveCiTemplate } from './ci';
 const pkg = require('../package');
 
+const QAWOLF_FLAG = '-q, --qawolf';
+const QAWOLF_DESCRIPTION = 'Create template for QA Wolf';
+
 program.usage('<command> [options]').version(pkg.version);
 
 program
   .command('azure')
   .description('set up an Azure Pipeline')
-  .action(async () => {
-    await saveCiTemplate('azure');
+  .option(QAWOLF_FLAG, QAWOLF_DESCRIPTION)
+  .action(async ({ qawolf }) => {
+    await saveCiTemplate({ provider: 'azure', qawolf });
   });
 
 program
   .command('bitbucket')
   .description('set up an Bitbucket Pipeline')
-  .action(async () => {
-    await saveCiTemplate('bitbucket');
+  .option(QAWOLF_FLAG, QAWOLF_DESCRIPTION)
+  .action(async ({ qawolf }) => {
+    await saveCiTemplate({ provider: 'bitbucket', qawolf });
   });
 
 program
   .command('circleci')
   .description('set up CircleCI')
-  .action(async () => {
-    await saveCiTemplate('circleci');
+  .option(QAWOLF_FLAG, QAWOLF_DESCRIPTION)
+  .action(async ({ qawolf }) => {
+    await saveCiTemplate({ provider: 'circleci', qawolf });
   });
 
 program
   .command('github')
   .description('set up a GitHub Action')
-  .action(async () => {
-    await saveCiTemplate('github');
+  .option(QAWOLF_FLAG, QAWOLF_DESCRIPTION)
+  .action(async ({ qawolf }) => {
+    await saveCiTemplate({ provider: 'github', qawolf });
   });
 
 program
   .command('gitlab')
   .description('set up GitLab CI/CD')
-  .action(async () => {
-    await saveCiTemplate('gitlab');
+  .option(QAWOLF_FLAG, QAWOLF_DESCRIPTION)
+  .action(async ({ qawolf }) => {
+    await saveCiTemplate({ provider: 'gitlab', qawolf });
   });
 
 program
   .command('jenkins')
   .description('set up Jenkins')
-  .action(async () => {
-    await saveCiTemplate('jenkins');
+  .option(QAWOLF_FLAG, QAWOLF_DESCRIPTION)
+  .action(async ({ qawolf }) => {
+    await saveCiTemplate({ provider: 'jenkins', qawolf });
   });
 
 program.arguments('<command>').action(cmd => {
