@@ -14,6 +14,9 @@ pipeline {
             steps {
                 // // Start local server
                 // sh 'npm run start & npx wait-on http://localhost:3000'
+
+                // replace below with command you want to run, example for running a script below
+                // sh 'node myScript.js'
                 sh 'npm test'
             }
         }
