@@ -3,14 +3,7 @@ import { compile } from 'handlebars';
 import { prompt } from 'inquirer';
 import { join, resolve } from 'path';
 const { version } = require('../package');
-
-type CiProvider =
-  | 'azure'
-  | 'bitbucket'
-  | 'circleci'
-  | 'github'
-  | 'gitlab'
-  | 'jenkins';
+import { CiProvider } from './cli';
 
 interface SaveCiTemplateArgs {
   provider: CiProvider;

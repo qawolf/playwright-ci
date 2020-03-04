@@ -3,69 +3,53 @@ import { yellow } from 'kleur';
 import { saveCiTemplate } from './ci';
 const pkg = require('../package');
 
-const QAWOLF_FLAG = '-q, --qawolf';
-const QAWOLF_DESCRIPTION = 'Create template for QA Wolf';
+export type CiProvider =
+  | 'azure'
+  | 'bitbucket'
+  | 'circleci'
+  | 'github'
+  | 'gitlab'
+  | 'jenkins';
+
+interface AddCiCommandsArgs {
+  program: program.CommanderStatic;
+  qawolf: boolean;
+}
+
+const CI_PROVIDERS: { command: CiProvider; label: string }[] = [
+  { command: 'azure', label: 'an Azure Pipeline' },
+  { command: 'bitbucket', label: 'a Bitbucket Pipeline' },
+  { command: 'circleci', label: 'CircleCI' },
+  { command: 'github', label: 'a GitHub Action' },
+  { command: 'gitlab', label: 'Gitlab CI/CD' },
+  { command: 'jenkins', label: 'Jenkins' },
+];
 
 program.usage('<command> [options]').version(pkg.version);
 
-program
-  .command('azure')
-  .description('set up an Azure Pipeline')
-  .option(QAWOLF_FLAG, QAWOLF_DESCRIPTION)
-  .action(async ({ qawolf }) => {
-    await saveCiTemplate({ provider: 'azure', qawolf });
+export const addCiCommands = ({ program, qawolf }: AddCiCommandsArgs): void => {
+  CI_PROVIDERS.forEach(({ command, label }) => {
+    program
+      .command(command)
+      .description(`set up ${label}`)
+      .action(async () => {
+        await saveCiTemplate({ provider: command, qawolf });
+      });
   });
 
-program
-  .command('bitbucket')
-  .description('set up an Bitbucket Pipeline')
-  .option(QAWOLF_FLAG, QAWOLF_DESCRIPTION)
-  .action(async ({ qawolf }) => {
-    await saveCiTemplate({ provider: 'bitbucket', qawolf });
+  program.arguments('<command>').action(cmd => {
+    console.log(yellow(`Invalid command "${cmd}"\n`));
+    program.help();
   });
 
-program
-  .command('circleci')
-  .description('set up CircleCI')
-  .option(QAWOLF_FLAG, QAWOLF_DESCRIPTION)
-  .action(async ({ qawolf }) => {
-    await saveCiTemplate({ provider: 'circleci', qawolf });
-  });
+  program.allowUnknownOption(false);
 
-program
-  .command('github')
-  .description('set up a GitHub Action')
-  .option(QAWOLF_FLAG, QAWOLF_DESCRIPTION)
-  .action(async ({ qawolf }) => {
-    await saveCiTemplate({ provider: 'github', qawolf });
-  });
+  program.parse(process.argv);
 
-program
-  .command('gitlab')
-  .description('set up GitLab CI/CD')
-  .option(QAWOLF_FLAG, QAWOLF_DESCRIPTION)
-  .action(async ({ qawolf }) => {
-    await saveCiTemplate({ provider: 'gitlab', qawolf });
-  });
+  if (!process.argv.slice(2).length) {
+    console.log('\n');
+    program.outputHelp();
+  }
+};
 
-program
-  .command('jenkins')
-  .description('set up Jenkins')
-  .option(QAWOLF_FLAG, QAWOLF_DESCRIPTION)
-  .action(async ({ qawolf }) => {
-    await saveCiTemplate({ provider: 'jenkins', qawolf });
-  });
-
-program.arguments('<command>').action(cmd => {
-  console.log(yellow(`Invalid command "${cmd}"\n`));
-  program.help();
-});
-
-program.allowUnknownOption(false);
-
-program.parse(process.argv);
-
-if (!process.argv.slice(2).length) {
-  console.log('\n');
-  program.outputHelp();
-}
+addCiCommands({ program, qawolf: false });
