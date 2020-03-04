@@ -3,7 +3,7 @@ import { compile } from 'handlebars';
 import { prompt } from 'inquirer';
 import { join, resolve } from 'path';
 const { version } = require('../package');
-import { CiProvider } from './cli';
+import { CiProvider } from './commands';
 
 interface SaveCiTemplateArgs {
   provider: CiProvider;
