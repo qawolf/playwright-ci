@@ -1,5 +1,5 @@
 import * as program from 'commander';
-import { yellow } from 'kleur';
+
 import { saveCiTemplate } from './ci';
 
 export type CiProvider =
@@ -33,18 +33,4 @@ export const addCiCommands = ({ program, qawolf }: AddCiCommandsArgs): void => {
         await saveCiTemplate({ provider: command, qawolf });
       });
   });
-
-  program.arguments('<command>').action(cmd => {
-    console.log(yellow(`Invalid command "${cmd}"\n`));
-    program.help();
-  });
-
-  program.allowUnknownOption(false);
-
-  program.parse(process.argv);
-
-  if (!process.argv.slice(2).length) {
-    console.log('\n');
-    program.outputHelp();
-  }
 };
