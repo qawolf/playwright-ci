@@ -1,7 +1,9 @@
 import * as program from 'commander';
 import { yellow } from 'kleur';
-const pkg = require('../package');
 import { addCiCommands } from './commands';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const pkg = require('../package');
 
 program.usage('<command> [options]').version(pkg.version);
 

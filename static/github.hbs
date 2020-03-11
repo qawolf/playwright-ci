@@ -37,10 +37,22 @@ jobs:
       #   run: npm run start & npx wait-on http://localhost:3000
 
       {{#if qawolf}}
-      - run: npx qawolf test
+      - run: npx qawolf test --headless
+        env:
+          # configure tests with environment variables
+          QAW_ARTIFACT_PATH: $\{{ github.workspace }}/artifacts
+          # you can also use GitHub secrets for environment variables
+          # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets
+          # LOGIN_PASSWORD: $\{{ secrets.PASSWORD }}
+      
+      - name: Upload Artifacts
+        if: always()
+        uses: actions/upload-artifact@master
+        with:
+          name: qawolf
+          path: $\{{ github.workspace }}/artifacts
       {{else}}
       # replace below with command you want to run, example for running a script below
       # - run: node myScript.js
       - run: npm test
       {{/if}}
-      

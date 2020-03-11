@@ -9,12 +9,20 @@ qawolf:
     - npm install
     # # Start local server
     # - npm run start & npx wait-on http://localhost:3000
+  {{#if qawolf}}
+    - npx qawolf test --headless
 
-    {{#if qawolf}}
-    - npx qawolf test
-    {{else}}
+  variables:
+    # configure tests with environment variables
+    QAW_ARTIFACT_PATH: $CI_PROJECT_DIR/artifacts
+  
+  artifacts:
+    when: always
+    paths:
+      - $CI_PROJECT_DIR/artifacts
+    expire_in: 1 week
+  {{else}}
     # replace below with command you want to run, example for running a script below
     # - node myScript.js
     - npm test
-    {{/if}}
-    
+  {{/if}}

@@ -22,7 +22,14 @@ steps:
   # - script: npm run start & npx wait-on http://localhost:3000
 
   {{#if qawolf}}
-  - script: npx qawolf test
+  - script: npx qawolf test --headless
+    env:
+      # configure tests with environment variables
+      QAW_ARTIFACT_PATH: $(System.DefaultWorkingDirectory)/artifacts
+
+  - publish: $(System.DefaultWorkingDirectory)/artifacts
+    artifact: artifacts
+    condition: always()
   {{else}}
   # replace below with command you want to run, example for running a script below
   # - script: node myScript.js

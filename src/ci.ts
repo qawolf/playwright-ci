@@ -2,8 +2,10 @@ import { outputFile, pathExists, readFileSync } from 'fs-extra';
 import { compile } from 'handlebars';
 import { prompt } from 'inquirer';
 import { join, resolve } from 'path';
-const { version } = require('../package');
 import { CiProvider } from './commands';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { version } = require('../package');
 
 interface SaveCiTemplateArgs {
   provider: CiProvider;
@@ -22,6 +24,17 @@ const paths = {
 const qawolfPaths = {
   ...paths,
   github: '.github/workflows/qawolf.yml',
+};
+
+export const buildCiTemplate = ({
+  provider,
+  qawolf,
+}: SaveCiTemplateArgs): string => {
+  const templateFn = compile(
+    readFileSync(resolve(__dirname, `../static/${provider}.hbs`), 'utf8'),
+  );
+
+  return templateFn({ qawolf, version });
 };
 
 export const saveCiTemplate = async ({
@@ -43,12 +56,8 @@ export const saveCiTemplate = async ({
     if (!overwrite) return;
   }
 
-  const ciTemplate = compile(
-    readFileSync(resolve(__dirname, `../static/${provider}.hbs`), 'utf8'),
-  );
-  const ci = ciTemplate({ qawolf, version });
-
-  await outputFile(outputPath, ci, 'utf8');
+  const template = buildCiTemplate({ provider, qawolf });
+  await outputFile(outputPath, template, 'utf8');
 
   console.log(`Saved ${provider} template to ${outputPath}`);
 };
