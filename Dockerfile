@@ -1,60 +1,14 @@
-FROM ubuntu:18.04
+# Mirror until official release 
+# https://github.com/microsoft/playwright/blob/ec3ee660430336d47a309553981eb960e49c2ede/docs/docker/Dockerfile.bionic
+FROM ubuntu:bionic
 
-RUN apt-get update &&\
-  # install Node.js
-  # https://github.com/nodesource/distributions
-  apt-get -y install curl \
-  # native node add-ons
-  gcc g++ make &&\
-  curl -sL https://deb.nodesource.com/setup_12.x | bash - &&\
-  apt-get -y install build-essential nodejs \
-  # install xvfb
-  xvfb \
-  # chromium dependencies
-  # https://github.com/microsoft/playwright/blob/master/docs/troubleshooting.md#chrome-headless-doesnt-launch-on-linuxwsl
-  gconf-service \
-  libasound2 \
-  libatk1.0-0 \
-  libatk-bridge2.0-0 \
-  libc6 \
-  libcairo2 \
-  libcups2 \
-  libdbus-1-3 \
-  libexpat1 \
-  libfontconfig1 \
-  libgcc1 \
-  libgconf-2-4 \
-  libgdk-pixbuf2.0-0 \
-  libglib2.0-0 \
-  libgtk-3-0 \
-  libnspr4 \
-  libpango-1.0-0 \ 
-  libpangocairo-1.0-0 \
-  libstdc++6 \
-  libx11-6 \
-  libx11-xcb1 \
-  libxcb1 \
-  libxcomposite1 \
-  libxcursor1 \
-  libxdamage1 \
-  libxext6 \
-  libxfixes3 \
-  libxi6 \
-  libxrandr2 \
-  libxrender1 \
-  libxss1 \
-  libxtst6 \
-  ca-certificates \
-  fonts-liberation \
-  libappindicator1 \
-  libnss3 \
-  lsb-release \
-  xdg-utils \
-  wget \
-  libgbm1 \
-  # webkit dependencies
-  # https://github.com/microsoft/playwright/blob/fce3842011f9be13717bd259ca3b30cdb0b36960/.github/workflows/webkit-linux.yml#L29
-  libwoff1 \
+# 1. Install node12
+RUN apt-get update && apt-get install -y curl && \
+  curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
+  apt-get install -y nodejs
+
+# 2. Install WebKit dependencies
+RUN apt-get install -y libwoff1 \
   libopus0 \
   libwebp6 \
   libwebpdemux2 \
@@ -64,15 +18,29 @@ RUN apt-get update &&\
   libhyphen0 \
   libgdk-pixbuf2.0-0 \
   libegl1 \
-  libgles2 \
-  libevent-2.1-6 \
   libnotify4 \
-  libvpx5 \
-  libxslt1.1 && \
-  # free up space
-  apt-get clean
+  libxslt1.1 \
+  libevent-2.1-6 \
+  libgles2 \
+  libvpx5
 
-# disable "Chrome is being controlled by automated test software"
-# https://github.com/jitsi/jibri/issues/208#issuecomment-518285349
-# https://www.chromium.org/administrators/linux-quick-start
-RUN mkdir -p /etc/opt/chrome/policies/managed && echo "{ \"CommandLineFlagSecurityWarningsEnabled\": false }" > /etc/opt/chrome/policies/managed/managed_policies.json
+# 3. Install Chromium dependencies
+
+RUN apt-get install -y libnss3 \
+  libxss1 \
+  libasound2
+
+# 4. Install Firefox dependencies
+
+RUN apt-get install -y libdbus-glib-1-2
+
+# 5. Add user so we don't need --no-sandbox in Chromium
+RUN groupadd -r pwuser && useradd -r -g pwuser -G audio,video pwuser \
+  && mkdir -p /home/pwuser/Downloads \
+  && chown -R pwuser:pwuser /home/pwuser
+
+# 6. (Optional) Install XVFB if there's a need to run browsers in headful mode
+RUN apt-get install -y xvfb
+
+# Run everything after as non-privileged user.
+USER pwuser
