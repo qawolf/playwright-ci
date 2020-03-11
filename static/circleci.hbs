@@ -22,14 +22,18 @@ jobs:
             # # Start local server
             # npm run start & 
             # npx wait-on http://localhost:3000
-
-            {{#if qawolf}}
-            npx qawolf test
-            {{else}}
+      {{#if qawolf}}
+            npx qawolf test --headless
+          environment:
+            # configure tests with environment variables
+            QAW_ARTIFACT_PATH: /tmp/artifacts
+      - store_artifacts:
+          path: /tmp/artifacts
+      {{else}}
             # replace below with command you want to run, example for running a script below
             # node myScript.js
             npm test
-            {{/if}}
+      {{/if}}
 
 # # example for running on a schedule, edit to suit your use case
 # # documentation: https://circleci.com/docs/2.0/configuration-reference/#schedule

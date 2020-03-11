@@ -15,7 +15,7 @@ interface AddCiCommandsArgs {
   qawolf: boolean;
 }
 
-const CI_PROVIDERS: { command: CiProvider; label: string }[] = [
+export const COMMANDS: { command: CiProvider; label: string }[] = [
   { command: 'azure', label: 'an Azure Pipeline' },
   { command: 'bitbucket', label: 'a Bitbucket Pipeline' },
   { command: 'circleci', label: 'CircleCI' },
@@ -25,7 +25,7 @@ const CI_PROVIDERS: { command: CiProvider; label: string }[] = [
 ];
 
 export const addCiCommands = ({ program, qawolf }: AddCiCommandsArgs): void => {
-  CI_PROVIDERS.forEach(({ command, label }) => {
+  COMMANDS.forEach(({ command, label }) => {
     program
       .command(command)
       .description(`set up ${label}`)

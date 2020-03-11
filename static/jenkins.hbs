@@ -11,19 +11,30 @@ pipeline {
             }
         }
         stage('Test') {
+            {{#if qawolf}}
+            environment { 
+                // configure tests with environment variables
+                QAW_ARTIFACT_PATH = './artifacts'
+            }
+            {{/if}}
             steps {
                 // // Start local server
                 // sh 'npm run start & npx wait-on http://localhost:3000'
-
                 {{#if qawolf}}
-                sh 'npx qawolf test'
+                sh 'npx qawolf test --headless'
                 {{else}}
                 // replace below with command you want to run, example for running a script below
                 // sh 'node myScript.js'
                 sh 'npm test'
                 {{/if}}
-                
             }
         }
+        {{#if qawolf}}
+        post {
+            always {
+                archiveArtifacts(artifacts: 'artifacts/**/*.*', fingerprint: true) 
+            }
+        }
+        {{/if}}
     }
 }

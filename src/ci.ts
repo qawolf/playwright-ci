@@ -24,6 +24,17 @@ const qawolfPaths = {
   github: '.github/workflows/qawolf.yml',
 };
 
+export const buildCiTemplate = ({
+  provider,
+  qawolf,
+}: SaveCiTemplateArgs): string => {
+  const templateFn = compile(
+    readFileSync(resolve(__dirname, `../static/${provider}.hbs`), 'utf8'),
+  );
+
+  return templateFn({ qawolf, version });
+};
+
 export const saveCiTemplate = async ({
   provider,
   qawolf,
@@ -43,12 +54,8 @@ export const saveCiTemplate = async ({
     if (!overwrite) return;
   }
 
-  const ciTemplate = compile(
-    readFileSync(resolve(__dirname, `../static/${provider}.hbs`), 'utf8'),
-  );
-  const ci = ciTemplate({ qawolf, version });
-
-  await outputFile(outputPath, ci, 'utf8');
+  const template = buildCiTemplate({ provider, qawolf });
+  await outputFile(outputPath, template, 'utf8');
 
   console.log(`Saved ${provider} template to ${outputPath}`);
 };

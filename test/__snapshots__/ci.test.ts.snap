@@ -1,0 +1,403 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`buildCiTemplate builds playwright templates: azure 1`] = `
+"# configure the pipeline to run based on different triggers
+# see https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema#triggers
+pool:
+  vmImage: \\"ubuntu-18.04\\"
+
+steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: \\"12.x\\"
+
+  - script: |
+      sudo apt update
+      # chromium dependencies
+      sudo apt-get install libgbm1
+      # webkit dependencies
+      sudo apt-get install libwoff1 libopus0 libwebp6 libwebpdemux2 libenchant1c2a libgudev-1.0-0 libsecret-1-0 libhyphen0 libgdk-pixbuf2.0-0 libegl1 libgles2 libevent-2.1-6 libnotify4 libvpx5 libxslt1.1
+    displayName: \\"Install browser dependencies\\"
+
+  - script: npm install
+
+  # # Start local server
+  # - script: npm run start & npx wait-on http://localhost:3000
+
+  # replace below with command you want to run, example for running a script below
+  # - script: node myScript.js
+  - script: npm test
+"
+`;
+
+exports[`buildCiTemplate builds playwright templates: bitbucket 1`] = `
+"pipelines:
+  default:
+    - step:
+        name: Playwright Tests
+        image: qawolf/playwright-ci:v0.4.0
+        caches:
+          - node
+        script:
+          - npm install
+        
+          ## Start local server
+          # - npm run start & npx wait-on http://localhost:3000
+          # replace below with command you want to run, example for running a script below
+          # - node myScript.js
+          - npm test
+"
+`;
+
+exports[`buildCiTemplate builds playwright templates: circleci 1`] = `
+"version: 2
+jobs:
+  build:
+    docker:
+      - image: qawolf/playwright-ci:v0.4.0
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: dependency-cache-{{ checksum \\"package-lock.json\\" }}
+
+      - run:
+          command: npm install
+
+      - save_cache:
+          key: dependency-cache-{{ checksum \\"package-lock.json\\" }}
+          paths:
+            - ./node_modules
+
+      - run:
+          command: |
+            # # Start local server
+            # npm run start & 
+            # npx wait-on http://localhost:3000
+            # replace below with command you want to run, example for running a script below
+            # node myScript.js
+            npm test
+
+# # example for running on a schedule, edit to suit your use case
+# # documentation: https://circleci.com/docs/2.0/configuration-reference/#schedule
+# workflows:
+#   version: 2
+#   on_schedule:
+#     jobs:
+#       - build
+#     triggers:
+#       - schedule:
+#           # test on schedule using cron syntax
+#           cron: \\"0 * * * *\\" # every hour
+#           filters:
+#             branches:
+#               only:
+#                 - master"
+`;
+
+exports[`buildCiTemplate builds playwright templates: github 1`] = `
+"name: playwright
+on:
+  push:
+    # test every branch
+    # edit below if you only want certain branches tested
+    branches: \\"*\\"
+  # schedule:
+  #   # test on schedule using cron syntax
+  #   - cron: \\"0 * * * *\\" # every hour
+jobs:
+  test:
+    runs-on: ubuntu-18.04
+
+    steps:
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          # chromium dependencies
+          sudo apt-get install libgbm1
+          # webkit dependencies
+          sudo apt-get install libwoff1 libopus0 libwebp6 libwebpdemux2 libenchant1c2a libgudev-1.0-0 libsecret-1-0 libhyphen0 libgdk-pixbuf2.0-0 libegl1 libgles2 libevent-2.1-6 libnotify4 libvpx5 libxslt1.1
+
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v1
+
+      - uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: \${{ runner.os }}-node-\${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            \${{ runner.os }}-node-
+
+      - run: npm install
+
+      # - name: Start local server
+      #   run: npm run start & npx wait-on http://localhost:3000
+
+      # replace below with command you want to run, example for running a script below
+      # - run: node myScript.js
+      - run: npm test
+"
+`;
+
+exports[`buildCiTemplate builds playwright templates: gitlab 1`] = `
+"qawolf:
+  image: qawolf/playwright-ci:v0.4.0
+
+  cache:
+    paths:
+      - node_modules/
+
+  script:
+    - npm install
+    # # Start local server
+    # - npm run start & npx wait-on http://localhost:3000
+    # replace below with command you want to run, example for running a script below
+    # - node myScript.js
+    - npm test
+"
+`;
+
+exports[`buildCiTemplate builds playwright templates: jenkins 1`] = `
+"pipeline {
+    agent {
+        docker {
+            image 'qawolf/playwright-ci:v0.4.0'
+        }
+    }
+    stages {
+        stage('Build') { 
+            steps {
+                sh 'npm install'
+            }
+        }
+        stage('Test') {
+            steps {
+                // // Start local server
+                // sh 'npm run start & npx wait-on http://localhost:3000'
+                // replace below with command you want to run, example for running a script below
+                // sh 'node myScript.js'
+                sh 'npm test'
+            }
+        }
+    }
+}"
+`;
+
+exports[`buildCiTemplate builds qawolf templates: azure_qawolf 1`] = `
+"# configure the pipeline to run based on different triggers
+# see https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema#triggers
+pool:
+  vmImage: \\"ubuntu-18.04\\"
+
+steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: \\"12.x\\"
+
+  - script: |
+      sudo apt update
+      # chromium dependencies
+      sudo apt-get install libgbm1
+      # webkit dependencies
+      sudo apt-get install libwoff1 libopus0 libwebp6 libwebpdemux2 libenchant1c2a libgudev-1.0-0 libsecret-1-0 libhyphen0 libgdk-pixbuf2.0-0 libegl1 libgles2 libevent-2.1-6 libnotify4 libvpx5 libxslt1.1
+    displayName: \\"Install browser dependencies\\"
+
+  - script: npm install
+
+  # # Start local server
+  # - script: npm run start & npx wait-on http://localhost:3000
+
+  - script: npx qawolf test --headless
+    env:
+      # configure tests with environment variables
+      QAW_ARTIFACT_PATH: $(System.DefaultWorkingDirectory)/artifacts
+
+  - publish: $(System.DefaultWorkingDirectory)/artifacts
+    artifact: artifacts
+    condition: always()
+"
+`;
+
+exports[`buildCiTemplate builds qawolf templates: bitbucket_qawolf 1`] = `
+"pipelines:
+  default:
+    - step:
+        name: QA Wolf Tests
+        image: qawolf/playwright-ci:v0.4.0
+        caches:
+          - node
+        script:
+          - npm install
+        
+          ## Start local server
+          # - npm run start & npx wait-on http://localhost:3000
+          - QAW_ARTIFACT_PATH=artifacts npx qawolf test --headless
+        artifacts:
+          - artifacts/**
+"
+`;
+
+exports[`buildCiTemplate builds qawolf templates: circleci_qawolf 1`] = `
+"version: 2
+jobs:
+  build:
+    docker:
+      - image: qawolf/playwright-ci:v0.4.0
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: dependency-cache-{{ checksum \\"package-lock.json\\" }}
+
+      - run:
+          command: npm install
+
+      - save_cache:
+          key: dependency-cache-{{ checksum \\"package-lock.json\\" }}
+          paths:
+            - ./node_modules
+
+      - run:
+          command: |
+            # # Start local server
+            # npm run start & 
+            # npx wait-on http://localhost:3000
+            npx qawolf test --headless
+          environment:
+            # configure tests with environment variables
+            QAW_ARTIFACT_PATH: /tmp/artifacts
+      - store_artifacts:
+          path: /tmp/artifacts
+
+# # example for running on a schedule, edit to suit your use case
+# # documentation: https://circleci.com/docs/2.0/configuration-reference/#schedule
+# workflows:
+#   version: 2
+#   on_schedule:
+#     jobs:
+#       - build
+#     triggers:
+#       - schedule:
+#           # test on schedule using cron syntax
+#           cron: \\"0 * * * *\\" # every hour
+#           filters:
+#             branches:
+#               only:
+#                 - master"
+`;
+
+exports[`buildCiTemplate builds qawolf templates: github_qawolf 1`] = `
+"name: playwright
+on:
+  push:
+    # test every branch
+    # edit below if you only want certain branches tested
+    branches: \\"*\\"
+  # schedule:
+  #   # test on schedule using cron syntax
+  #   - cron: \\"0 * * * *\\" # every hour
+jobs:
+  test:
+    runs-on: ubuntu-18.04
+
+    steps:
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          # chromium dependencies
+          sudo apt-get install libgbm1
+          # webkit dependencies
+          sudo apt-get install libwoff1 libopus0 libwebp6 libwebpdemux2 libenchant1c2a libgudev-1.0-0 libsecret-1-0 libhyphen0 libgdk-pixbuf2.0-0 libegl1 libgles2 libevent-2.1-6 libnotify4 libvpx5 libxslt1.1
+
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v1
+
+      - uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: \${{ runner.os }}-node-\${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            \${{ runner.os }}-node-
+
+      - run: npm install
+
+      # - name: Start local server
+      #   run: npm run start & npx wait-on http://localhost:3000
+
+      - run: npx qawolf test --headless
+        env:
+          # configure tests with environment variables
+          QAW_ARTIFACT_PATH: \${{ github.workspace }}/artifacts
+          # you can also use GitHub secrets for environment variables
+          # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets
+          # LOGIN_PASSWORD: \${{ secrets.PASSWORD }}
+      
+      - name: Upload Artifacts
+        if: always()
+        uses: actions/upload-artifact@master
+        with:
+          name: qawolf
+          path: \${{ github.workspace }}/artifacts
+"
+`;
+
+exports[`buildCiTemplate builds qawolf templates: gitlab_qawolf 1`] = `
+"qawolf:
+  image: qawolf/playwright-ci:v0.4.0
+
+  cache:
+    paths:
+      - node_modules/
+
+  script:
+    - npm install
+    # # Start local server
+    # - npm run start & npx wait-on http://localhost:3000
+    - npx qawolf test --headless
+
+  variables:
+    # configure tests with environment variables
+    QAW_ARTIFACT_PATH: $CI_PROJECT_DIR/artifacts
+  
+  artifacts:
+    when: always
+    paths:
+      - $CI_PROJECT_DIR/artifacts
+    expire_in: 1 week
+"
+`;
+
+exports[`buildCiTemplate builds qawolf templates: jenkins_qawolf 1`] = `
+"pipeline {
+    agent {
+        docker {
+            image 'qawolf/playwright-ci:v0.4.0'
+        }
+    }
+    stages {
+        stage('Build') { 
+            steps {
+                sh 'npm install'
+            }
+        }
+        stage('Test') {
+            environment { 
+                // configure tests with environment variables
+                QAW_ARTIFACT_PATH = './artifacts'
+            }
+            steps {
+                // // Start local server
+                // sh 'npm run start & npx wait-on http://localhost:3000'
+                sh 'npx qawolf test --headless'
+            }
+        }
+        post {
+            always {
+                archiveArtifacts(artifacts: 'artifacts/**/*.*', fingerprint: true) 
+            }
+        }
+    }
+}"
+`;
