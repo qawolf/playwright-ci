@@ -2,8 +2,10 @@ import { outputFile, pathExists, readFileSync } from 'fs-extra';
 import { compile } from 'handlebars';
 import { prompt } from 'inquirer';
 import { join, resolve } from 'path';
-const { version } = require('../package');
 import { CiProvider } from './commands';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { version } = require('../package');
 
 interface SaveCiTemplateArgs {
   provider: CiProvider;
