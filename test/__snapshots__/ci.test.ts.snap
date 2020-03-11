@@ -288,7 +288,7 @@ jobs:
 `;
 
 exports[`buildCiTemplate builds qawolf templates: github_qawolf 1`] = `
-"name: playwright
+"name: qawolf
 on:
   push:
     # test every branch
