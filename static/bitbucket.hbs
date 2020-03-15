@@ -15,6 +15,7 @@ pipelines:
           ## Start local server
           # - npm run start & npx wait-on http://localhost:3000
         {{#if qawolf}}
+          - FFMPEG_PATH=/usr/bin/ffmpeg # for recording video
           - QAW_ARTIFACT_PATH=artifacts npx qawolf test --headless
         {{else}}
           # replace below with command you want to run, example for running a script below
