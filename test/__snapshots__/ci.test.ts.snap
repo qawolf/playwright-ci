@@ -201,6 +201,8 @@ steps:
       sudo apt-get install libgbm1
       # webkit dependencies
       sudo apt-get install libwoff1 libopus0 libwebp6 libwebpdemux2 libenchant1c2a libgudev-1.0-0 libsecret-1-0 libhyphen0 libgdk-pixbuf2.0-0 libegl1 libgles2 libevent-2.1-6 libnotify4 libvpx5 libxslt1.1
+      # ffmpeg
+      sudo apt-get install -y ffmpeg
     displayName: \\"Install browser dependencies\\"
 
   - script: npm install
@@ -211,6 +213,7 @@ steps:
   - script: npx qawolf test --headless
     env:
       # configure tests with environment variables
+      FFMPEG_PATH: /usr/bin/ffmpeg # for recording video
       QAW_ARTIFACT_PATH: $(System.DefaultWorkingDirectory)/artifacts
 
   - publish: $(System.DefaultWorkingDirectory)/artifacts
@@ -232,6 +235,7 @@ exports[`buildCiTemplate builds qawolf templates: bitbucket_qawolf 1`] = `
         
           ## Start local server
           # - npm run start & npx wait-on http://localhost:3000
+          - FFMPEG_PATH=/usr/bin/ffmpeg # for recording video
           - QAW_ARTIFACT_PATH=artifacts npx qawolf test --headless
         artifacts:
           - artifacts/**
@@ -266,6 +270,7 @@ jobs:
             npx qawolf test --headless
           environment:
             # configure tests with environment variables
+            FFMPEG_PATH: /usr/bin/ffmpeg # for recording video
             QAW_ARTIFACT_PATH: /tmp/artifacts
       - store_artifacts:
           path: /tmp/artifacts
@@ -309,6 +314,8 @@ jobs:
           sudo apt-get install libgbm1
           # webkit dependencies
           sudo apt-get install libwoff1 libopus0 libwebp6 libwebpdemux2 libenchant1c2a libgudev-1.0-0 libsecret-1-0 libhyphen0 libgdk-pixbuf2.0-0 libegl1 libgles2 libevent-2.1-6 libnotify4 libvpx5 libxslt1.1
+          # ffmpeg
+          sudo apt-get install -y ffmpeg
 
       - uses: actions/checkout@v2
 
@@ -329,6 +336,7 @@ jobs:
       - run: npx qawolf test --headless
         env:
           # configure tests with environment variables
+          FFMPEG_PATH: /usr/bin/ffmpeg # for recording video
           QAW_ARTIFACT_PATH: \${{ github.workspace }}/artifacts
           # you can also use GitHub secrets for environment variables
           # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets
@@ -359,6 +367,7 @@ exports[`buildCiTemplate builds qawolf templates: gitlab_qawolf 1`] = `
 
   variables:
     # configure tests with environment variables
+    FFMPEG_PATH: /usr/bin/ffmpeg # for recording video
     QAW_ARTIFACT_PATH: $CI_PROJECT_DIR/artifacts
   
   artifacts:
@@ -385,6 +394,7 @@ exports[`buildCiTemplate builds qawolf templates: jenkins_qawolf 1`] = `
         stage('Test') {
             environment { 
                 // configure tests with environment variables
+                FFMPEG_PATH = '/usr/bin/ffmpeg' // for recording video
                 QAW_ARTIFACT_PATH = './artifacts'
             }
             steps {
