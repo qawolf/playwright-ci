@@ -28,6 +28,7 @@
     "@inquirer/confirm": "0.0.8-alpha.0",
     "@inquirer/select": "0.0.9-alpha.0",
     "debug": "^4.1.1",
+    "fs-extra": "^8.1.0",
     "handlebars": "^4.7.3",
     "tslib": "^1.11.1"
   },

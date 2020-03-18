@@ -1,4 +1,4 @@
-import { promises as fs, readFileSync } from 'fs';
+import { outputFile, readFileSync } from 'fs-extra';
 import { compile } from 'handlebars';
 import { join, resolve } from 'path';
 import { promptCiProvider } from './prompt';
@@ -43,7 +43,7 @@ export const saveCiTemplate = async ({
   if (!shouldOverwrite) return;
 
   const template = buildCiTemplate({ provider, qawolf });
-  await fs.writeFile(outputPath, template, 'utf8');
+  await outputFile(outputPath, template, 'utf8');
 
   console.log(`Saved ${provider} template to ${outputPath}`);
 };

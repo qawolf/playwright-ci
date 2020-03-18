@@ -1,7 +1,7 @@
 import confirm from '@inquirer/confirm';
 import select from '@inquirer/select';
+import { pathExists } from 'fs-extra';
 import { CI_PROVIDERS } from './providers';
-import { pathExists } from './utils';
 
 export const promptConfirmOverwrite = (path: string): Promise<boolean> =>
   confirm({
