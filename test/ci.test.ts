@@ -1,6 +1,7 @@
-// TODO snapshots...
 import { COMMANDS } from '../src/commands';
-import { buildCiTemplate } from '../src/ci';
+import * as ci from '../src/ci';
+
+const { buildCiTemplate, promptOverwrite } = ci;
 
 describe('buildCiTemplate', () => {
   it('builds playwright templates', () => {
@@ -19,5 +20,42 @@ describe('buildCiTemplate', () => {
         `${provider}_qawolf`,
       );
     });
+  });
+});
+
+describe('promptOverwrite', () => {
+  afterAll(() => jest.restoreAllMocks());
+
+  it('returns true if path does not exist', async () => {
+    jest
+      .spyOn(ci, 'pathExists')
+      .mockReturnValue(new Promise(resolve => resolve(false)));
+
+    const shouldSave = await promptOverwrite('myTest.test.js');
+    expect(shouldSave).toBe(true);
+  });
+
+  it('returns true if path exists but can overwrite', async () => {
+    jest
+      .spyOn(ci, 'pathExists')
+      .mockReturnValue(new Promise(resolve => resolve(true)));
+    jest
+      .spyOn(ci, 'promptConfirmOverwrite')
+      .mockReturnValue(new Promise(resolve => resolve(true)));
+
+    const shouldSave = await promptOverwrite('myTest.test.js');
+    expect(shouldSave).toBe(true);
+  });
+
+  it('returns false if path exists and cannot overwrite', async () => {
+    jest
+      .spyOn(ci, 'pathExists')
+      .mockReturnValue(new Promise(resolve => resolve(true)));
+    jest
+      .spyOn(ci, 'promptConfirmOverwrite')
+      .mockReturnValue(new Promise(resolve => resolve(false)));
+
+    const shouldSave = await promptOverwrite('myTest.test.js');
+    expect(shouldSave).toBe(false);
   });
 });

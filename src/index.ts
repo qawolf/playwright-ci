@@ -5,3 +5,4 @@ if (isCLI) {
 }
 
 export { addCiCommands } from './commands';
+export { promptOverwrite } from './ci';

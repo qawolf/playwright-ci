@@ -1,6 +1,6 @@
-import { promises as fsPromises, readFileSync } from 'fs';
+import { promises as fs, readFileSync } from 'fs';
 import { compile } from 'handlebars';
-import { prompt } from 'inquirer';
+import confirm from '@inquirer/confirm';
 import { join, resolve } from 'path';
 import { CiProvider } from './commands';
 
@@ -27,8 +27,8 @@ const qawolfPaths = {
 };
 
 // https://stackoverflow.com/a/57708635
-const fileExists = async (path: string): Promise<boolean> =>
-  !!(await fsPromises.stat(path).catch(() => false));
+export const pathExists = async (path: string): Promise<boolean> =>
+  !!(await fs.stat(path).catch(() => false));
 
 export const buildCiTemplate = ({
   provider,
@@ -41,6 +41,19 @@ export const buildCiTemplate = ({
   return templateFn({ qawolf, version });
 };
 
+export const promptConfirmOverwrite = (path: string): Promise<boolean> =>
+  confirm({
+    message: `"${path}" already exists, overwrite it?`,
+    default: false,
+  });
+
+export const promptOverwrite = async (path: string): Promise<boolean> => {
+  const exists = await pathExists(path);
+  if (!exists) return true;
+
+  return promptConfirmOverwrite(path);
+};
+
 export const saveCiTemplate = async ({
   provider,
   qawolf,
@@ -49,19 +62,11 @@ export const saveCiTemplate = async ({
 
   const outputPath = join(process.cwd(), providerPath);
 
-  if (await fileExists(outputPath)) {
-    const { overwrite } = await prompt<{ overwrite: boolean }>([
-      {
-        message: `"${outputPath}" already exists, overwrite it?`,
-        name: 'overwrite',
-        type: 'confirm',
-      },
-    ]);
-    if (!overwrite) return;
-  }
+  const shouldOverwrite = await promptOverwrite(outputPath);
+  if (!shouldOverwrite) return;
 
   const template = buildCiTemplate({ provider, qawolf });
-  await fsPromises.writeFile(outputPath, template, 'utf8');
+  await fs.writeFile(outputPath, template, 'utf8');
 
   console.log(`Saved ${provider} template to ${outputPath}`);
 };
