@@ -1,4 +1,4 @@
-import { outputFile, pathExists, readFileSync } from 'fs-extra';
+import { promises as fsPromises, readFileSync } from 'fs';
 import { compile } from 'handlebars';
 import { prompt } from 'inquirer';
 import { join, resolve } from 'path';
@@ -26,6 +26,10 @@ const qawolfPaths = {
   github: '.github/workflows/qawolf.yml',
 };
 
+// https://stackoverflow.com/a/57708635
+const fileExists = async (path: string): Promise<boolean> =>
+  !!(await fsPromises.stat(path).catch(() => false));
+
 export const buildCiTemplate = ({
   provider,
   qawolf,
@@ -45,7 +49,7 @@ export const saveCiTemplate = async ({
 
   const outputPath = join(process.cwd(), providerPath);
 
-  if (await pathExists(outputPath)) {
+  if (await fileExists(outputPath)) {
     const { overwrite } = await prompt<{ overwrite: boolean }>([
       {
         message: `"${outputPath}" already exists, overwrite it?`,
@@ -57,7 +61,7 @@ export const saveCiTemplate = async ({
   }
 
   const template = buildCiTemplate({ provider, qawolf });
-  await outputFile(outputPath, template, 'utf8');
+  await fsPromises.writeFile(outputPath, template, 'utf8');
 
   console.log(`Saved ${provider} template to ${outputPath}`);
 };
