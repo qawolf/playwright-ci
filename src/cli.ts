@@ -18,7 +18,7 @@ const getCiProvider = async (): Promise<CiProvider | null> => {
   });
 };
 
-export const install = async (qawolf: boolean = false): Promise<void> => {
+export const install = async (qawolf = false): Promise<void> => {
   const provider = await getCiProvider();
   if (!provider) return;
 
