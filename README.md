@@ -10,7 +10,7 @@ npx playwright-ci
 
 You will be prompted to choose your CI provider from a list.
 
-Supported CI Providers:
+Supported CI providers:
 
 - [<img align="center" height="20px" src="https://cdn.iconscout.com/icon/free/png-256/azure-190760.png" /> Azure Devops](https://azure.microsoft.com/en-us/services/devops)
 - [<img align="center" height="20px" src="https://upload.wikimedia.org/wikipedia/commons/0/0e/Bitbucket-blue-logomark-only.svg" /> Bitbucket Pipelines](https://bitbucket.org/product/features/pipelines)
