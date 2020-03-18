@@ -6,9 +6,16 @@
 
 ```bash
 npx playwright-ci
-```
 
-You will be prompted to choose your CI provider from a list.
+? Choose CI Provider (Use arrow keys)
+  Azure DevOps
+  Bitbucket Pipelines
+  CircleCI
+❯ GitHub Actions
+  GitLab CI/CD
+  Jenkins
+  Skip CI setup
+```
 
 Supported CI providers:
 
