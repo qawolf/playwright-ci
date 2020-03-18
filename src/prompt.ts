@@ -30,6 +30,7 @@ export const promptCiProvider = async (): Promise<string | null> => {
       choices: CI_PROVIDERS.map(provider => {
         return { name: provider.label, value: provider.name };
       }),
+      default: 'github',
       message: 'Choose CI Provider',
       name: 'provider',
       type: 'list',
