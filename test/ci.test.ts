@@ -1,11 +1,13 @@
-// TODO snapshots...
-import { COMMANDS } from '../src/commands';
-import { buildCiTemplate } from '../src/ci';
+import * as ci from '../src/ci';
+import { CI_PROVIDERS } from '../src/providers';
+
+const { buildCiTemplate } = ci;
 
 describe('buildCiTemplate', () => {
   it('builds playwright templates', () => {
-    COMMANDS.forEach(item => {
-      const provider = item.command;
+    CI_PROVIDERS.forEach(item => {
+      if (!item.name) return;
+      const provider = item.name;
       expect(buildCiTemplate({ provider, qawolf: false })).toMatchSnapshot(
         provider,
       );
@@ -13,8 +15,10 @@ describe('buildCiTemplate', () => {
   });
 
   it('builds qawolf templates', () => {
-    COMMANDS.forEach(item => {
-      const provider = item.command;
+    CI_PROVIDERS.forEach(item => {
+      if (!item.name) return;
+
+      const provider = item.name;
       expect(buildCiTemplate({ provider, qawolf: true })).toMatchSnapshot(
         `${provider}_qawolf`,
       );

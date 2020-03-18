@@ -1,30 +1,17 @@
-import { outputFile, pathExists, readFileSync } from 'fs-extra';
+import { outputFile, readFileSync } from 'fs-extra';
 import { compile } from 'handlebars';
-import { prompt } from 'inquirer';
 import { join, resolve } from 'path';
-import { CiProvider } from './commands';
+import { promptCiProvider } from './prompt';
+import { promptOverwrite } from './prompt';
+import { CI_PROVIDERS } from './providers';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { version } = require('../package');
 
 interface SaveCiTemplateArgs {
-  provider: CiProvider;
+  provider: string;
   qawolf: boolean;
 }
-
-const paths = {
-  azure: 'azure-pipelines.yml',
-  bitbucket: 'bitbucket-pipelines.yml',
-  circleci: '.circleci/config.yml',
-  github: '.github/workflows/playwright.yml',
-  gitlab: '.gitlab-ci.yml',
-  jenkins: 'Jenkinsfile',
-};
-
-const qawolfPaths = {
-  ...paths,
-  github: '.github/workflows/qawolf.yml',
-};
 
 export const buildCiTemplate = ({
   provider,
@@ -41,23 +28,29 @@ export const saveCiTemplate = async ({
   provider,
   qawolf,
 }: SaveCiTemplateArgs): Promise<void> => {
-  const providerPath = qawolf ? qawolfPaths[provider] : paths[provider];
+  const fullProvider = CI_PROVIDERS.find(p => p.name === provider);
+  if (!fullProvider) {
+    throw new Error(`No template for CI provider ${provider}`);
+  }
+
+  const providerPath = qawolf
+    ? fullProvider.qawolfPath || fullProvider.path
+    : fullProvider.path;
 
   const outputPath = join(process.cwd(), providerPath);
 
-  if (await pathExists(outputPath)) {
-    const { overwrite } = await prompt<{ overwrite: boolean }>([
-      {
-        message: `"${outputPath}" already exists, overwrite it?`,
-        name: 'overwrite',
-        type: 'confirm',
-      },
-    ]);
-    if (!overwrite) return;
-  }
+  const shouldOverwrite = await promptOverwrite(outputPath);
+  if (!shouldOverwrite) return;
 
   const template = buildCiTemplate({ provider, qawolf });
   await outputFile(outputPath, template, 'utf8');
 
   console.log(`Saved ${provider} template to ${outputPath}`);
+};
+
+export const install = async (qawolf = false): Promise<void> => {
+  const provider = await promptCiProvider();
+  if (!provider) return;
+
+  await saveCiTemplate({ provider, qawolf });
 };
