@@ -1,8 +1,10 @@
 #!/usr/bin/env node
+import { install } from './ci';
 const isCLI = !module.parent;
+
 if (isCLI) {
-  require('./cli');
+  install();
 }
 
-export { promptOverwrite } from './ci';
-export { install } from './cli';
+export { promptOverwrite } from './prompt';
+export { install } from './ci';
