@@ -26,10 +26,9 @@
   "peerDependencies": {},
   "dependencies": {
     "@inquirer/confirm": "0.0.8-alpha.0",
-    "commander": "^4.1.1",
+    "@inquirer/select": "0.0.9-alpha.0",
     "debug": "^4.1.1",
     "handlebars": "^4.7.3",
-    "kleur": "^3.0.3",
     "tslib": "^1.11.1"
   },
   "devDependencies": {

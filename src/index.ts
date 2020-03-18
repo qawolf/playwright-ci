@@ -4,5 +4,5 @@ if (isCLI) {
   require('./cli');
 }
 
-export { addCiCommands } from './commands';
+export { install } from './cli';
 export { promptOverwrite } from './ci';

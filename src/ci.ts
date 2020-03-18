@@ -2,10 +2,17 @@ import { promises as fs, readFileSync } from 'fs';
 import { compile } from 'handlebars';
 import confirm from '@inquirer/confirm';
 import { join, resolve } from 'path';
-import { CiProvider } from './commands';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { version } = require('../package');
+
+export type CiProvider =
+  | 'azure'
+  | 'bitbucket'
+  | 'circleci'
+  | 'github'
+  | 'gitlab'
+  | 'jenkins';
 
 interface SaveCiTemplateArgs {
   provider: CiProvider;

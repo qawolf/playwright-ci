@@ -1,12 +1,13 @@
-import { COMMANDS } from '../src/commands';
 import * as ci from '../src/ci';
+import { CI_PROVIDERS } from '../src/cli';
 
 const { buildCiTemplate, promptOverwrite } = ci;
 
 describe('buildCiTemplate', () => {
   it('builds playwright templates', () => {
-    COMMANDS.forEach(item => {
-      const provider = item.command;
+    CI_PROVIDERS.forEach(item => {
+      if (!item.value) return;
+      const provider = item.value;
       expect(buildCiTemplate({ provider, qawolf: false })).toMatchSnapshot(
         provider,
       );
@@ -14,8 +15,10 @@ describe('buildCiTemplate', () => {
   });
 
   it('builds qawolf templates', () => {
-    COMMANDS.forEach(item => {
-      const provider = item.command;
+    CI_PROVIDERS.forEach(item => {
+      if (!item.value) return;
+
+      const provider = item.value;
       expect(buildCiTemplate({ provider, qawolf: true })).toMatchSnapshot(
         `${provider}_qawolf`,
       );

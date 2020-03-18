@@ -1,24 +1,26 @@
-import * as program from 'commander';
-import { yellow } from 'kleur';
-import { addCiCommands } from './commands';
+import select from '@inquirer/select';
+import { CiProvider, saveCiTemplate } from './ci';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const pkg = require('../package');
+export const CI_PROVIDERS: Array<{ name: string; value: CiProvider | null }> = [
+  { name: 'Azure DevOps', value: 'azure' },
+  { name: 'Bitbucket Pipelines', value: 'bitbucket' },
+  { name: 'CircleCI', value: 'circleci' },
+  { name: 'GitHub Actions', value: 'github' },
+  { name: 'GitLab CI/CD', value: 'gitlab' },
+  { name: 'Jenkins', value: 'jenkins' },
+  { name: 'Skip CI setup', value: null },
+];
 
-program.usage('<command> [options]').version(pkg.version);
+const getCiProvider = async (): Promise<CiProvider | null> => {
+  return select({
+    message: 'Select a CI provider',
+    choices: CI_PROVIDERS,
+  });
+};
 
-addCiCommands({ program, qawolf: false });
+export const install = async (qawolf: boolean = false): Promise<void> => {
+  const provider = await getCiProvider();
+  if (!provider) return;
 
-program.arguments('<command>').action(cmd => {
-  console.log(yellow(`Invalid command "${cmd}"\n`));
-  program.help();
-});
-
-program.allowUnknownOption(false);
-
-program.parse(process.argv);
-
-if (!process.argv.slice(2).length) {
-  console.log('\n');
-  program.outputHelp();
-}
+  await saveCiTemplate({ provider, qawolf });
+};
