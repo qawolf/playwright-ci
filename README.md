@@ -37,3 +37,5 @@ Supported CI providers:
 [CircleCI ![](https://circleci.com/gh/qawolf/playwright-ci.svg?style=svg)](https://circleci.com/gh/qawolf/playwright-ci)
 
 [GitHub Actions ![](https://github.com/qawolf/playwright-ci/workflows/playwright/badge.svg)](https://github.com/qawolf/playwright-ci/actions?query=workflow%3Aplaywright)
+
+[Gitlab ![](https://img.shields.io/gitlab/pipeline/qawolf/playwright-ci)](https://gitlab.com/qawolf/playwright-ci/pipelines)
