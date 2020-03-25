@@ -27,3 +27,13 @@ Supported CI providers:
 - [🤵 Jenkins](https://jenkins.io)
 
 [Chat with us](https://gitter.im/qawolf/community) if you want to run Playwright somewhere else.
+
+### Tests
+
+[Azure Pipelines ![](https://dev.azure.com/perljonathan0753/playwright-ci/_apis/build/status/qawolf.playwright-ci?branchName=master)](https://dev.azure.com/perljonathan0753/playwright-ci/_build)
+
+[Bitbucket Pipelines ![](https://img.shields.io/bitbucket/pipelines/qawolf/playwright-ci)](https://bitbucket.org/qawolf/playwright-ci/addon/pipelines/home)
+
+[CircleCI ![](https://circleci.com/gh/qawolf/playwright-ci.svg?style=svg)](https://circleci.com/gh/qawolf/playwright-ci)
+
+[GitHub Actions ![](https://github.com/qawolf/playwright-ci/workflows/playwright/badge.svg)](https://github.com/qawolf/playwright-ci/actions?query=workflow%3Aplaywright)
