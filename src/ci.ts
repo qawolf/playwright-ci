@@ -9,8 +9,9 @@ import { CI_PROVIDERS } from './providers';
 const { version } = require('../package');
 
 interface SaveCiTemplateArgs {
+  force?: boolean;
   provider: string;
-  qawolf: boolean;
+  qawolf?: boolean;
 }
 
 export const buildCiTemplate = ({
@@ -25,6 +26,7 @@ export const buildCiTemplate = ({
 };
 
 export const saveCiTemplate = async ({
+  force,
   provider,
   qawolf,
 }: SaveCiTemplateArgs): Promise<void> => {
@@ -39,8 +41,10 @@ export const saveCiTemplate = async ({
 
   const outputPath = join(process.cwd(), providerPath);
 
-  const shouldOverwrite = await promptOverwrite(outputPath);
-  if (!shouldOverwrite) return;
+  if (!force) {
+    const shouldOverwrite = await promptOverwrite(outputPath);
+    if (!shouldOverwrite) return;
+  }
 
   const template = buildCiTemplate({ provider, qawolf });
   await outputFile(outputPath, template, 'utf8');

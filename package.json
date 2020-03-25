@@ -19,7 +19,8 @@
     "build": "tsc -p tsconfig.release.json",
     "watch": "tsc -w -p tsconfig.release.json",
     "lint": "eslint . --ext .ts,.tsx",
-    "test": "jest",
+    "test": "node ./test/launch.js",
+    "test:unit": "jest",
     "release": "np --no-cleanup",
     "version": "npm run clean && npm run build"
   },
@@ -43,6 +44,7 @@
     "eslint-plugin-jest": "~23.8.2",
     "jest": "~25.1.0",
     "np": "^6.2.0",
+    "playwright": "^0.12.1",
     "prettier": "~1.19.1",
     "rimraf": "~3.0.2",
     "ts-jest": "^25.2.1",

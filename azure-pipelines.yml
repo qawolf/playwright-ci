@@ -1,0 +1,26 @@
+# configure the pipeline to run based on different triggers
+# see https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema#triggers
+pool:
+  vmImage: 'ubuntu-18.04'
+
+steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '12.x'
+
+  - script: |
+      sudo apt update
+      # chromium dependencies
+      sudo apt-get install libgbm1
+      # webkit dependencies
+      sudo apt-get install libwoff1 libopus0 libwebp6 libwebpdemux2 libenchant1c2a libgudev-1.0-0 libsecret-1-0 libhyphen0 libgdk-pixbuf2.0-0 libegl1 libgles2 libevent-2.1-6 libnotify4 libvpx5 libxslt1.1
+    displayName: 'Install browser dependencies'
+
+  - script: npm install
+
+  # # Start local server
+  # - script: npm run start & npx wait-on http://localhost:3000
+
+  # replace below with command you want to run, example for running a script below
+  # - script: node myScript.js
+  - script: npm test
