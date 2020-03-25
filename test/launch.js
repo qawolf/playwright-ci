@@ -1,7 +1,7 @@
 const pw = require('playwright');
 
 (async () => {
-  let browser = await pw.chromium.launch();
+  let browser = await pw.chromium.launch({ args: ['--no-sandbox'] });
   console.log('launched chromium!');
   await browser.close();
 
