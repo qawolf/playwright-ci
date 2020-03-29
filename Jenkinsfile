@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'qawolf/playwright-ci:v0.7.0'
+            image 'qawolf/playwright-ci:v0.8.0'
         }
     }
     stages {
