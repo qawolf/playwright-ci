@@ -22,7 +22,7 @@
     "test": "node ./test/launch.js",
     "test:unit": "jest",
     "release": "np --no-cleanup",
-    "version": "npm run clean && npm run build"
+    "version": "npm run clean && npm run build && npm run test:unit -- --updateSnapshot"
   },
   "peerDependencies": {},
   "dependencies": {
