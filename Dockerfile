@@ -1,5 +1,3 @@
-# Mirror until official release 
-# https://github.com/microsoft/playwright/blob/ec3ee660430336d47a309553981eb960e49c2ede/docs/docker/Dockerfile.bionic
 FROM ubuntu:bionic
 
 # 1. Install node12
@@ -22,29 +20,25 @@ RUN apt-get install -y libwoff1 \
   libxslt1.1 \
   libevent-2.1-6 \
   libgles2 \
-  libvpx5 \ 
-  # qawolf
-  libgles2 \
-  libnotify4 \
-  libglu1-mesa
-
+  libvpx5
 
 # 3. Install Chromium dependencies
 
 RUN apt-get install -y libnss3 \
   libxss1 \
-  libasound2 \
-  # qawolf
-  libgbm1
+  libasound2
 
 # 4. Install Firefox dependencies
 
-RUN apt-get install -y libdbus-glib-1-2 \
-  # qawolf
-  libxext6 \
-  libxt6 \
-  libxtst6
+RUN apt-get install -y libdbus-glib-1-2
 
-# 5. Install FFmpeg
+# # 5. Add user so we don't need --no-sandbox in Chromium
+# RUN groupadd -r pwuser && useradd -r -g pwuser -G audio,video pwuser \
+#   && mkdir -p /home/pwuser/Downloads \
+#   && chown -R pwuser:pwuser /home/pwuser
 
-RUN apt-get install -y ffmpeg
+# 6. (Optional) Install XVFB if there's a need to run browsers in headful mode
+RUN apt-get install -y xvfb
+
+# # Run everything after as non-privileged user.
+# USER pwuser
