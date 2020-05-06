@@ -4,8 +4,8 @@ pipelines:
         name: Playwright Tests
         image: qawolf/playwright-ci:v0.10.0
         caches:
-          - ~/.cache
-          - node_modules
+          - node
+          - playwright
         script:
           - npm install
         
@@ -14,3 +14,7 @@ pipelines:
           # replace below with command you want to run, example for running a script below
           # - node myScript.js
           - npm test
+
+definitions:
+  caches:
+    playwright: ~/.cache

@@ -15,7 +15,7 @@ jobs:
       - save_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
-            - /root/cache
+            - /root/.cache
             - ./node_modules
 
       - run:
