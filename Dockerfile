@@ -26,27 +26,29 @@ RUN apt-get install -y libwoff1 \
 
 RUN apt-get install -y libnss3 \
   libxss1 \
-  libasound2
+  libasound2 \
+  libgbm-dev
 
 # 4. Install Firefox dependencies
 
-RUN apt-get install -y libdbus-glib-1-2
+RUN apt-get install -y libdbus-glib-1-2 \
+  libxt6
 
-# # 5. Add user so we don't need --no-sandbox in Chromium
-# RUN groupadd -r pwuser && useradd -r -g pwuser -G audio,video pwuser \
-#   && mkdir -p /home/pwuser/Downloads \
-#   && chown -R pwuser:pwuser /home/pwuser
-
-# 6. (Optional) Install XVFB if there's a need to run browsers in headful mode
-RUN apt-get install -y xvfb
-
-# # Run everything after as non-privileged user.
-# USER pwuser
-
-# Install ffmpeg
-
+# 5. Install ffmpeg to bring in audio and video codecs necessary for playing videos in Firefox.
 RUN apt-get install -y ffmpeg
+
+# Expose it to playwright-video
 ENV FFMPEG_PATH=/usr/bin/ffmpeg
+
+# We skip this step since not running as admin causes problems in certain CIs
+# # 6. Add user so we don't need --no-sandbox in Chromium
+# RUN groupadd -r pwuser && useradd -r -g pwuser -G audio,video pwuser \
+#     && mkdir -p /home/pwuser/Downloads \
+#     && chown -R pwuser:pwuser /home/pwuser
+
+# 7. (Optional) Install XVFB if there's a need to run browsers in headful mode
+
+RUN apt-get install -y xvfb
 
 # Install yarn
 
