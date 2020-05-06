@@ -8,7 +8,8 @@ pipelines:
         {{/if}}
         image: qawolf/playwright-ci:v{{{version}}}
         caches:
-          - node
+          - ~/.cache
+          - node_modules
         script:
           - npm install
         
