@@ -2,7 +2,7 @@ pipelines:
   default:
     - step:
         name: Playwright Tests
-        image: qawolf/playwright-ci:v0.9.0
+        image: qawolf/playwright-ci:v0.10.0
         caches:
           - node
         script:
