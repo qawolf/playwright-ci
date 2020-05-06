@@ -3,6 +3,7 @@ qawolf:
 
   cache:
     paths:
+      - .cache/
       - node_modules/
 
   script:

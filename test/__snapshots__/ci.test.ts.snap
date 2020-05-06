@@ -67,6 +67,7 @@ jobs:
       - save_cache:
           key: dependency-cache-{{ checksum \\"package-lock.json\\" }}
           paths:
+            - ./.cache
             - ./node_modules
 
       - run:
@@ -140,6 +141,7 @@ exports[`buildCiTemplate builds playwright templates: gitlab 1`] = `
 
   cache:
     paths:
+      - .cache/
       - node_modules/
 
   script:
@@ -253,6 +255,7 @@ jobs:
       - save_cache:
           key: dependency-cache-{{ checksum \\"package-lock.json\\" }}
           paths:
+            - ./.cache
             - ./node_modules
 
       - run:
@@ -341,6 +344,7 @@ exports[`buildCiTemplate builds qawolf templates: gitlab_qawolf 1`] = `
 
   cache:
     paths:
+      - .cache/
       - node_modules/
 
   script:
