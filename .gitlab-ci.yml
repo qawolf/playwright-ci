@@ -1,11 +1,6 @@
 qawolf:
   image: qawolf/playwright-ci:v0.10.0
 
-  cache:
-    paths:
-      - .cache/
-      - node_modules/
-
   script:
     - npm install
     # # Start local server

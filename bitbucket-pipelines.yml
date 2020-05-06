@@ -3,8 +3,6 @@ pipelines:
     - step:
         name: Playwright Tests
         image: qawolf/playwright-ci:v0.10.0
-        caches:
-          - node
         script:
           - npm install
         
